@@ -1,0 +1,19 @@
+-------------------- Auto-Git Log --------------------
+		Thu May 28 2020 14:09:14 GMT+0700 (Indochina Time)
+------------------------------------------------------
+
+Modified files:
+* app.js
+* controllers/user.js
+* routes/user.js
+
+
+Created files:
+* controllers/auth.js
+* routes/auth.js
+
+
+Deleted files:
+
+
+Renamed files:
