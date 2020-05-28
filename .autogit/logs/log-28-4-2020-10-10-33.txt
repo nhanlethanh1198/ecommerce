@@ -1,0 +1,22 @@
+-------------------- Auto-Git Log --------------------
+		Thu May 28 2020 10:10:33 GMT+0700 (Indochina Time)
+------------------------------------------------------
+
+Modified files:
+* app.js
+* controllers/user.js
+* package.json
+* routes/user.js
+
+
+Created files:
+* .autogit/autogit.json
+* helpers/dbErrorHandle.js
+* models/user.js
+* validator/index.js
+
+
+Deleted files:
+
+
+Renamed files:
