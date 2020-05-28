@@ -1,0 +1,5 @@
+{
+  "updateInterval": 3600,
+  "logging": true,
+  "silent": true
+}
