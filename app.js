@@ -17,14 +17,14 @@ const app = express();
 
 // Database
 mongoose
-  .connect(process.env.DATABASE_LOCAL, {
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => {
-    console.log("DB connected");
-  });
+	.connect(process.env.DATABASE_LOCAL, {
+		useNewUrlParser: true,
+		useCreateIndex: true,
+		useUnifiedTopology: true,
+	})
+	.then(() => {
+		console.log("DB connected");
+	});
 
 // middleware
 app.use(morgan("dev"));
@@ -41,5 +41,5 @@ app.use("/api", categoryRouter);
 app.use("/api", productRouter);
 
 app.listen(PORT, () => {
-  console.log(`Server running at port ${PORT}`);
+	console.log(`Server running at port ${PORT}`);
 });
