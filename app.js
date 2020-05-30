@@ -9,6 +9,7 @@ require("dotenv").config();
 // import routes
 const authRouter = require("./routes/auth");
 const userRouter = require("./routes/user");
+const categoryRouter = require("./routes/category");
 
 // app
 const app = express();
@@ -35,6 +36,7 @@ const PORT = process.env.PORT || 8000;
 // routes middleware
 app.use("/api", authRouter);
 app.use("/api", userRouter);
+app.use("/api", categoryRouter);
 
 app.listen(PORT, () => {
   console.log(`Server running at port ${PORT}`);
