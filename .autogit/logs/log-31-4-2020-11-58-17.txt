@@ -1,0 +1,17 @@
+-------------------- Auto-Git Log --------------------
+		Sun May 31 2020 11:58:17 GMT+0700 (Indochina Time)
+------------------------------------------------------
+
+Modified files:
+* controllers/product.js
+* models/product.js
+* routes/product.js
+
+
+Created files:
+
+
+Deleted files:
+
+
+Renamed files:
