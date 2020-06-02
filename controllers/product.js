@@ -185,8 +185,6 @@ exports.listCategories = (req, res) => {
 	});
 };
 
-
-
 /**
  * list products by search
  * we will implement product search in react frontend
@@ -196,53 +194,76 @@ exports.listCategories = (req, res) => {
  */
 
 exports.listBySearch = (req, res) => {
-    let order = req.body.order ? req.body.order : "desc";
-    let sortBy = req.body.sortBy ? req.body.sortBy : "_id";
-    let limit = req.body.limit ? parseInt(req.body.limit) : 100;
-    let skip = parseInt(req.body.skip);
-    let findArgs = {};
+	let order = req.body.order ? req.body.order : "desc";
+	let sortBy = req.body.sortBy ? req.body.sortBy : "_id";
+	let limit = req.body.limit ? parseInt(req.body.limit) : 100;
+	let skip = parseInt(req.body.skip);
+	let findArgs = {};
 
-    // console.log(order, sortBy, limit, skip, req.body.filters);
-    // console.log("findArgs", findArgs);
+	// console.log(order, sortBy, limit, skip, req.body.filters);
+	// console.log("findArgs", findArgs);
 
-    for (let key in req.body.filters) {
-        if (req.body.filters[key].length > 0) {
-            if (key === "price") {
-                // gte -  greater than price [0-10]
-                // lte - less than
-                findArgs[key] = {
-                    $gte: req.body.filters[key][0],
-                    $lte: req.body.filters[key][1]
-                };
-            } else {
-                findArgs[key] = req.body.filters[key];
-            }
-        }
-    }
+	for (let key in req.body.filters) {
+		if (req.body.filters[key].length > 0) {
+			if (key === "price") {
+				// gte -  greater than price [0-10]
+				// lte - less than
+				findArgs[key] = {
+					$gte: req.body.filters[key][0],
+					$lte: req.body.filters[key][1],
+				};
+			} else {
+				findArgs[key] = req.body.filters[key];
+			}
+		}
+	}
 
-    Product.find(findArgs)
-        .select("-photo")
-        .populate("category")
-        .sort([[sortBy, order]])
-        .skip(skip)
-        .limit(limit)
-        .exec((error, data) => {
-            if (error) {
-                return res.status(400).json({
-                    error: "Products not found"
-                });
-            }
-            res.json({
-                size: data.length,
-                data
-            });
-        });
+	Product.find(findArgs)
+		.select("-photo")
+		.populate("category")
+		.sort([[sortBy, order]])
+		.skip(skip)
+		.limit(limit)
+		.exec((error, data) => {
+			if (error) {
+				return res.status(400).json({
+					error: "Products not found",
+				});
+			}
+			res.json({
+				size: data.length,
+				data,
+			});
+		});
 };
 
 exports.photo = (req, res, next) => {
-	if(req.product.photo.data){
-		res.set('Content-Type', req.product.photo.contentType)
-		res.send(req.product.photo.data)
+	if (req.product.photo.data) {
+		res.set("Content-Type", req.product.photo.contentType);
+		res.send(req.product.photo.data);
 	}
 	next();
-}
+};
+
+exports.listSearch = (req, res) => {
+	// Create query object to hold search value and category value
+	const query = {};
+	// assign search value to  query.name
+	if (req.query.search) {
+		query.name = { $regex: req.query.search, $options: "i" };
+		// assign category value to query.category
+		if (req.query.category && req.query.category !== "All") {
+			query.category = req.query.category;
+		}
+		// find the product based on query object with 2 properties
+		// search and category
+		Product.find(query, (error, products) => {
+			if (error) {
+				return res.status(400).json({
+					error: errorHandler(error),
+				});
+			}
+			res.json(products);
+		}).select("-photo");
+	}
+};
