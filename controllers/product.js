@@ -5,7 +5,9 @@ const Product = require("../models/product");
 const errorHandler = require("../helpers/dbErrorHandle");
 
 exports.productById = (req, res, next, id) => {
-	Product.findById(id).exec((error, product) => {
+	Product.findById(id)
+	.populate('category')
+	.exec((error, product) => {
 		if (error || !product) {
 			return res.status(400).json({
 				error: "Product not found!",
@@ -199,10 +201,6 @@ exports.listBySearch = (req, res) => {
 	let limit = req.body.limit ? parseInt(req.body.limit) : 100;
 	let skip = parseInt(req.body.skip);
 	let findArgs = {};
-
-	// console.log(order, sortBy, limit, skip, req.body.filters);
-	// console.log("findArgs", findArgs);
-
 	for (let key in req.body.filters) {
 		if (req.body.filters[key].length > 0) {
 			if (key === "price") {
@@ -266,4 +264,25 @@ exports.listSearch = (req, res) => {
 			res.json(products);
 		}).select("-photo");
 	}
+};
+
+
+/**
+ * it will find the products based on the req product category
+ * other products that has the same category, will be returned
+ */
+exports.listRelated = (req, res) => {
+    let limit = req.query.limit ? parseInt(req.query.limit) : 6;
+
+    Product.find({ _id: { $ne: req.product }, category: req.product.category })
+        .limit(limit)
+        .populate('category', '_id name')
+        .exec((err, products) => {
+            if (err) {
+                return res.status(400).json({
+                    error: 'Products not found'
+                });
+            }
+            res.json(products);
+        });
 };
